@@ -24,12 +24,6 @@ class main_thread : public thread
 			// Let's say you want to run fibers in the "game render thread", you could just hook the "game render" function and run the fibers inside !
 			// This way you have perfectly sinced fibers with the game rendering thread !
 			fibers_pool::get()->do_run();
-
-			// Just for test purpose, when we press 'F8', it's removing every registered fibers (stopping them for execution !)
-			if (GetAsyncKeyState(VK_F8))
-			{
-				fibers_pool::get()->clear();
-			}
 		}
 
 		void stop() override
@@ -73,20 +67,15 @@ class main_fiber : public fiber
 int main()
 {
 	// Create a thread to run fibers inside (To simulate fibers running in a game thread for example...)
-	main_thread mainthread;
-	threads_pool::get()->emplace("main_thread", &mainthread);
+	threads_pool::get()->emplace("main_thread", new main_thread());
 
-	// Create our test fiber...
-	main_fiber mainfiber;
-	fibers_pool::get()->emplace("main_fiber", &mainfiber);
+	// Create a test fiber...
+	fibers_pool::get()->emplace("main_fiber", new main_fiber());
 
-	// Sleep a bit...
-	Sleep(2000);
+	// Pause the program, until we press a key...
+	system("pause");
 
-	// Re-Create our test fiber just for the fun (To test if it's re-run properly)
-	main_fiber test;
-	fibers_pool::get()->emplace("main_fiber", &test);
-
-	// We don't want the main program to stop, so we just wait infinite (Bcs we don't really care here, it's just for test purpose)
-	Sleep(INFINITE);
+	// Clear everything.
+	fibers_pool::get()->clear();
+	threads_pool::get()->clear();
 }

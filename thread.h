@@ -52,5 +52,5 @@ class threads_pool : public singleton<threads_pool>
 		void clear();
 
 	private:
-		std::map<std::string, thread*> m_threads;
+		std::map<std::string, std::shared_ptr<thread>> m_threads;
 };

@@ -25,8 +25,8 @@ class fiber
 		virtual void update() = 0;
 
 	private:
-		HANDLE m_curr_fiber;
-		HANDLE m_main_fiber;
+		void* m_curr_fiber;
+		void* m_main_fiber;
 		bool m_allow_update;
 		ULONGLONG m_wake_at;
 };
@@ -43,5 +43,5 @@ class fibers_pool : public singleton<fibers_pool>
 		void clear();
 
 	private:
-		std::map<std::string, fiber*> m_fibers;
+		std::map<std::string, std::shared_ptr<fiber>> m_fibers;
 };

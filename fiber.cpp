@@ -32,7 +32,6 @@ fiber::fiber()
 
 fiber::~fiber()
 {
-	CloseHandle(m_main_fiber);
 	DeleteFiber(m_curr_fiber);
 }
 
