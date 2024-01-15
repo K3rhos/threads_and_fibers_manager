@@ -62,9 +62,9 @@ void threads_pool::erase(const std::string& _name)
 {
 	if (m_threads.contains(_name))
 	{
-		m_threads[_name]->m_is_running = false;
+		m_threads[_name]->break_loop();
 
-		while (!m_threads[_name]->m_has_stopped)
+		while (!m_threads[_name]->has_stopped())
 		{
 			Sleep(1);
 		}
@@ -79,9 +79,9 @@ void threads_pool::clear()
 {
 	for (const auto& [name, thread] : m_threads)
 	{
-		thread->m_is_running = false;
+		thread->break_loop();
 
-		while (!thread->m_has_stopped)
+		while (!thread->has_stopped())
 		{
 			Sleep(1);
 		}
