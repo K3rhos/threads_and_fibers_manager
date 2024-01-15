@@ -20,15 +20,14 @@ class fiber
 		void tick();
 		void wait(ULONGLONG _ms);
 
-		bool m_allow_update;
-
 	protected:
-		virtual void start() = 0;
+		virtual void start(bool& _allow_update) = 0;
 		virtual void update() = 0;
 
 	private:
 		HANDLE m_curr_fiber;
 		HANDLE m_main_fiber;
+		bool m_allow_update;
 		ULONGLONG m_wake_at;
 };
 

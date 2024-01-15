@@ -44,8 +44,11 @@ class main_thread : public thread
 class main_fiber : public fiber
 {
 	public:
-		void start() override
+		void start(bool& _allow_update) override
 		{
+			// Uncomment this line if you don't want the update loop to be ran.
+			// _allow_update = false;
+
 			// Same thing as the thread class but for the fiber.
 
 			std::cout << "Fiber just started !" << std::endl;

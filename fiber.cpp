@@ -14,7 +14,7 @@ fiber::fiber()
 
 		if (self)
 		{
-			self->start();
+			self->start(self->m_allow_update);
 
 			while (self->m_allow_update)
 			{
