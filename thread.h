@@ -21,19 +21,14 @@ class thread
 		virtual void update() = 0;
 		virtual void stop() = 0;
 
-		void break_loop()
+		void close()
 		{
 			m_is_running = false;
-		}
 
-		bool is_running()
-		{
-			return m_is_running;
-		}
-
-		bool has_stopped()
-		{
-			return m_has_stopped;
+			while (!m_has_stopped)
+			{
+				Sleep(1);
+			}
 		}
 
 	private:
