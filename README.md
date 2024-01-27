@@ -34,14 +34,19 @@ class yourthread : public thread
 class yourfiber : public fiber
 {
     public:
-        void start(bool& _allow_update) override
+        void start() override
         {
-            _allow_update = true;
+
         }
         
         void update() override
         {
         
+        }
+
+        void stop() override
+        {
+            
         }
 };
 ```
