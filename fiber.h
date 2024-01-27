@@ -19,16 +19,12 @@ class fiber
 
 		void tick();
 		void wait(ULONGLONG _ms);
-		void close();
 
 	protected:
 		virtual void start() = 0;
 		virtual void update() = 0;
-		virtual void stop() = 0;
 
 	private:
-		bool m_is_running;
-
 		void* m_curr_fiber;
 		void* m_main_fiber;
 		

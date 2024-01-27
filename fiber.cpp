@@ -4,8 +4,6 @@
 
 fiber::fiber()
 {
-	m_is_running = true;
-
 	m_wake_at = GetTickCount64();
 
 	m_main_fiber = INVALID_HANDLE_VALUE;
@@ -17,14 +15,12 @@ fiber::fiber()
 		{
 			self->start();
 
-			while (self->m_is_running)
+			while (true)
 			{
 				self->update();
 
 				self->wait(0);
 			}
-
-			SwitchToFiber(self->m_main_fiber);
 		}
 	}, this);
 }
@@ -42,11 +38,6 @@ void fiber::tick()
 {
 	m_main_fiber = IsThreadAFiber() ? GetCurrentFiber() : ConvertThreadToFiber(nullptr);
 
-	if (!m_is_running)
-	{
-		return;
-	}
-
 	if (GetTickCount64() < m_wake_at)
 	{
 		return;
@@ -62,15 +53,6 @@ void fiber::wait(ULONGLONG _ms)
 	m_wake_at = GetTickCount64() + _ms;
 
 	SwitchToFiber(m_main_fiber);
-}
-
-
-
-void fiber::close()
-{
-	m_is_running = false;
-
-	stop();
 }
 
 
@@ -106,8 +88,6 @@ void fibers_pool::erase(const std::string& _name)
 
 	if (m_fibers.contains(_name))
 	{
-		m_fibers[_name]->close();
-
 		m_fibers.erase(_name);
 	}
 
@@ -119,11 +99,6 @@ void fibers_pool::erase(const std::string& _name)
 void fibers_pool::clear()
 {
 	m_locked = true; // We are preventing the 'fibers_pool::do_run()' to iterate through the loop when removing fibers (So in this way it's thread safe !)
-
-	for (const auto& [name, fiber] : m_fibers)
-	{
-		fiber->close();
-	}
 
 	m_fibers.clear();
 

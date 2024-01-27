@@ -43,11 +43,6 @@ class yourfiber : public fiber
         {
         
         }
-
-        void stop() override
-        {
-            
-        }
 };
 ```
 

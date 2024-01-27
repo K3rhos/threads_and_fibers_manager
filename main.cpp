@@ -53,11 +53,6 @@ class main_fiber : public fiber
 
 			wait(100); // This one is not necessarily required, it's for the example, so we can see the ouput in the console better !
 		}
-
-		void stop() override
-		{
-			std::cout << "Fiber just stopped !" << std::endl;
-		}
 };
 
 
