@@ -5,7 +5,6 @@
 thread::thread()
 {
 	m_is_running = true;
-	m_has_stopped = false;
 
 	m_handle = CreateThread
 	(
@@ -27,8 +26,6 @@ thread::thread()
 				}
 
 				self->stop();
-
-				self->m_has_stopped = true;
 			}
 
 			return EXIT_SUCCESS;

@@ -25,16 +25,12 @@ class thread
 		{
 			m_is_running = false;
 
-			while (!m_has_stopped)
-			{
-				Sleep(1);
-			}
+			WaitForSingleObject(m_handle, INFINITE);
 		}
 
 	private:
 		HANDLE m_handle;
 		bool m_is_running;
-		bool m_has_stopped;
 };
 
 
