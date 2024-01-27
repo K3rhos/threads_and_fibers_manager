@@ -56,6 +56,19 @@ threads_pool::get()->emplace("your_thread_name", &thread);
 
 yourfiber fiber;
 fibers_pool::get()->emplace("your_fiber_name", &fiber);
+
+// /!\ Creating thread or fiber on the stack can be risky if your code go out of the scope
+// the running threads/fibers will be cleaned from memory, and we don't want that,
+// so creating them on the heap is probably better ! /!\
+// Like that:
+
+threads_pool::get()->emplace("your_thread_name", new yourthread());
+
+// or...
+
+fibers_pool::get()->emplace("your_fiber_name", new yourfiber());
+
+// Since we are using smart pointers, they will be properly cleaned from memory when calling clear() or erase() functions !
 ```
 
 - Removing a thread/fiber by name
