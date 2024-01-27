@@ -19,15 +19,19 @@ class fiber
 
 		void tick();
 		void wait(ULONGLONG _ms);
+		void close();
 
 	protected:
-		virtual void start(bool& _allow_update) = 0;
+		virtual void start() = 0;
 		virtual void update() = 0;
+		virtual void stop() = 0;
 
 	private:
+		bool m_is_running;
+
 		void* m_curr_fiber;
 		void* m_main_fiber;
-		bool m_allow_update;
+		
 		ULONGLONG m_wake_at;
 };
 
@@ -44,4 +48,6 @@ class fibers_pool : public singleton<fibers_pool>
 
 	private:
 		std::map<std::string, std::shared_ptr<fiber>> m_fibers;
+
+		bool m_locked = false;
 };

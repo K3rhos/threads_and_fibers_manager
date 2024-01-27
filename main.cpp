@@ -38,11 +38,8 @@ class main_thread : public thread
 class main_fiber : public fiber
 {
 	public:
-		void start(bool& _allow_update) override
+		void start() override
 		{
-			// Uncomment this line if you don't want the update loop to be ran.
-			// _allow_update = false;
-
 			// Same thing as the thread class but for the fiber.
 
 			std::cout << "Fiber just started !" << std::endl;
@@ -57,9 +54,10 @@ class main_fiber : public fiber
 			wait(100); // This one is not necessarily required, it's for the example, so we can see the ouput in the console better !
 		}
 
-		// There is no 'stop' function for a fiber, simply because when we stop a fiber it is simply erased (removed) from the fiber list.
-		// Since the fiber is instantly cutted from running when removed, we could wait a bit to give time for the fiber to run a stop function
-		// but it's useless anyway.
+		void stop() override
+		{
+			std::cout << "Fiber just stopped !" << std::endl;
+		}
 };
 
 
