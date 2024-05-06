@@ -59,11 +59,8 @@ void fiber::wait(ULONGLONG _ms)
 
 void fibers_pool::do_run()
 {
-	// This make the thing thread safe and prevent to iterate in the loop and removing fibers at the same, that could result in a crash !
-	if (m_locked)
-	{
-		return;
-	}
+	// This make the thing thread safe and prevent to iterate in the loop and removing/adding fibers at the same, that could result in a crash !
+	std::lock_guard<std::mutex> lock(m_mutex);
 
 	for (const auto& [name, fiber] : m_fibers)
 	{
@@ -75,32 +72,33 @@ void fibers_pool::do_run()
 
 void fibers_pool::emplace(const std::string& _name, fiber* _fiber)
 {
-	erase(_name);
-
-	m_fibers.emplace(_name, _fiber);
-}
-
-
-
-void fibers_pool::erase(const std::string& _name)
-{
-	m_locked = true; // We are preventing the 'fibers_pool::do_run()' to iterate through the loop when removing fibers (So in this way it's thread safe !)
+	std::lock_guard<std::mutex> lock(m_mutex);
 
 	if (m_fibers.contains(_name))
 	{
 		m_fibers.erase(_name);
 	}
 
-	m_locked = false;
+	m_fibers.emplace(_name, (fiber*)_fiber);
+}
+
+
+
+void fibers_pool::erase(const std::string& _name)
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+
+	if (m_fibers.contains(_name))
+	{
+		m_fibers.erase(_name);
+	}
 }
 
 
 
 void fibers_pool::clear()
 {
-	m_locked = true; // We are preventing the 'fibers_pool::do_run()' to iterate through the loop when removing fibers (So in this way it's thread safe !)
+	std::lock_guard<std::mutex> lock(m_mutex);
 
 	m_fibers.clear();
-
-	m_locked = false;
 }

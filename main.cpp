@@ -12,6 +12,8 @@ class main_thread : public thread
 		void start() override
 		{
 			// Here is the virtual function 'start' overridden, it's executed right after the thread creation !
+
+			std::cout << "Thread just started !" << std::endl;
 		}
 
 		void update() override
@@ -29,6 +31,8 @@ class main_thread : public thread
 		void stop() override
 		{
 			// ... and finally executed when the thread just stop !
+
+			std::cout << "Thread stopped !" << std::endl;
 		}
 };
 
@@ -59,16 +63,19 @@ class main_fiber : public fiber
 
 int main()
 {
+	threads_pool* threads = threads_pool::get();
+	fibers_pool* fibers = fibers_pool::get();
+
 	// Create a thread to run fibers inside (To simulate fibers running in a game thread for example...)
-	threads_pool::get()->emplace("main_thread", new main_thread());
+	threads->emplace("main_thread", new main_thread());
 
 	// Create a test fiber...
-	fibers_pool::get()->emplace("main_fiber", new main_fiber());
+	fibers->emplace("main_fiber", new main_fiber());
 
 	// Pause the program, until we press a key...
 	system("pause");
 
 	// Clear everything.
-	fibers_pool::get()->clear();
-	threads_pool::get()->clear();
+	fibers->clear();
+	threads->clear();
 }

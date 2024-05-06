@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <mutex>
 
 #include "singleton.h"
 
@@ -45,5 +46,5 @@ class fibers_pool : public singleton<fibers_pool>
 	private:
 		std::map<std::string, std::shared_ptr<fiber>> m_fibers;
 
-		bool m_locked = false;
+		std::mutex m_mutex;
 };
